@@ -23,6 +23,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 600;
+const unsigned int VERTEX_VIEW_SIZE = 10;
 
 int main() {
     // Initialize GLFW
@@ -51,6 +52,7 @@ int main() {
         return -1;
     }
 
+    glPointSize(VERTEX_VIEW_SIZE);
 
     // Create and set shaders
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -155,6 +157,17 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
 }
 
 void processInput(GLFWwindow *window) {
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+    }
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
