@@ -86,6 +86,9 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         shaderProgram.Activate();
+        int vertexColorLocation = shaderProgram.GetUniformLocation("ourColor");
+        float greenValue = sin(glfwGetTime())/2.0f + 0.5f;
+        Shader::SetFloatVector4Uniform(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
         glBindVertexArray(VAO);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);

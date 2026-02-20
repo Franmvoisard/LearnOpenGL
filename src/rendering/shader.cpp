@@ -22,6 +22,9 @@ std::string get_file_contents(const std::string &filename) {
     throw(errno);
 }
 
+void Shader::SetFloatVector4Uniform(int uniformIndex, float v0, float v1, float v2, float v3) {
+    glUniform4f(uniformIndex, v0, v1, v2, v3);
+}
 Shader::Shader(const char *vertexPath, const char *fragmentPath)
 {
     std::string vertexCode = get_file_contents(vertexPath);
@@ -76,4 +79,13 @@ void Shader::Activate() {
 
 void Shader::Delete() {
     glDeleteProgram(ID);
+}
+
+GLint Shader::GetUniformLocation(const char *str) const {
+    const GLint uniformLocation = glGetUniformLocation(ID, str);
+    if (uniformLocation == -1) {
+        std::cout << "ERROR::SHADER::UNIFORM::NOT_FOUND::" << str  << std::endl;
+        return -1;
+    }
+    return uniformLocation;
 }
