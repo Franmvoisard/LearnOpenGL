@@ -1,30 +1,38 @@
-#include "shader.h"
+#include "shader.hpp"
 
 #include <fstream>
 #include <ios>
 #include <iostream>
+#include <sstream>
 
 #include "glad/glad.h"
 
 std::string get_file_contents(const std::string &filename) {
 
-    std::ifstream in(filename, std::ios::binary);
+    std::ifstream fileInputStream;
+    fileInputStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
-    if (in) {
-        std::string contents;
-        in.seekg(0, std::ios::end);
-        contents.resize(in.tellg());
-        in.seekg(0, std::ios::beg);
-        in.read(&contents[0], contents.size());
-        in.close();
-        return contents;
+    try
+    {
+        // Open file
+        fileInputStream.open(filename);
+        std::stringstream fileContent;
+
+        // Read content
+        fileContent << fileInputStream.rdbuf();
+        fileInputStream.close();
+        return fileContent.str();
     }
-    throw(errno);
+    catch(std::ifstream::failure &exception)
+    {
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ::" << exception.what() << std::endl;
+    }
 }
 
-void Shader::SetFloatVector4Uniform(int uniformIndex, float v0, float v1, float v2, float v3) {
+void Shader::SetFloatVector4(int uniformIndex, float v0, float v1, float v2, float v3) {
     glUniform4f(uniformIndex, v0, v1, v2, v3);
 }
+
 Shader::Shader(const char *vertexPath, const char *fragmentPath)
 {
     std::string vertexCode = get_file_contents(vertexPath);
@@ -71,6 +79,18 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath)
     // Use program and free shaders memory
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+}
+
+void Shader::SetInt(const std::string &name, int value) const {
+    glUniform1i(GetUniformLocation(name.c_str()), value);
+}
+
+void Shader::SetBool(const std::string &name, bool value) const {
+    glUniform1i(GetUniformLocation(name.c_str()), static_cast<int>(value));
+}
+
+void Shader::SetFloat(const std::string &name, float value) const {
+    glUniform1f(GetUniformLocation(name.c_str()), value);
 }
 
 void Shader::Activate() {
