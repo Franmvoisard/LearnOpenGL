@@ -47,15 +47,13 @@ int main() {
 
     // Initialize Triangle Vertex array object and vertex buffer object
     constexpr float vertices[] = {
-        -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+         0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
         -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
          0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-         0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f
     };
 
     constexpr unsigned int indices[] = {
         0, 1, 2,
-        2, 3, 0
     };
 
     // Create vertex buffer object
@@ -73,9 +71,9 @@ int main() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // Enable vertex attribute array
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), static_cast<void *>(0));
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), reinterpret_cast<void *>(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
 
